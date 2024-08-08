@@ -6,4 +6,10 @@
 #define ODBC_INI_GEN_VERSION_PATCH @odbc_ini_gen_VERSION_PATCH@
 #define ODBC_INI_GEN_VERSION       "@odbc_ini_gen_VERSION@"
 
+/* Architecture (needed by MSVC) */
+
+#ifndef _@TARGET_ARCH@_
+#define _@TARGET_ARCH@_
+#endif /* !_@TARGET_ARCH@_ */
+
 #endif /* !ODBC_INI_GEN_CONFIG_H */

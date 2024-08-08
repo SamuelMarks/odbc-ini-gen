@@ -25,6 +25,9 @@
 #endif /* defined(WIN32) || defined(_WIN32) || defined(__WIN32__) ||           \
           defined(__NT__) */
 
+#include "odbc_ini_gen_cli.h"
+#include "odbc_ini_gen_config.h"
+
 bool is_directory(const char *);
 bool is_file(const char *);
 
@@ -51,13 +54,14 @@ int main(int argc, char *argv[]) {
       }
 #endif
       ;
-  switch (argc) {
-  case 0:
-  case 1:
+  struct DocoptArgs args =
+      docopt(argc, argv, /* help */ true, /* version */ ODBC_INI_GEN_VERSION);
 
-  }
   if ((sizeof search_paths / sizeof search_paths[0]) == 0)
     fputs("Nowhere to search for ODBC drivers", stderr);
+  else if (args.infer_all) {
+    puts("TODO: implement --infer-all");
+  }
 
   puts("Hello");
   return drivers_added > 0 ? EXIT_SUCCESS : EXIT_FAILURE;

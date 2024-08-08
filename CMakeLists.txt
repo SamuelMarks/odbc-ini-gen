@@ -87,10 +87,12 @@ if (CMAKE_C_STANDARD GREATER 90)
     endif (HAS_STDBOOL)
 endif (CMAKE_C_STANDARD GREATER 90)
 
-# configure a header file to pass the version number only
+include("${CMAKE_SOURCE_DIR}/cmake/modules/get_arch.cmake")
+get_arch()
+
 configure_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/cmake/config.h.in"
-        "${PROJECT_NAME}Config.h"
+        "${PROJECT_NAME}_config.h"
 )
 
 #===============================================================================
@@ -98,6 +100,9 @@ configure_file(
 # Doing this at the end so that all definitions and link/include paths are
 # available for the sub-projects.
 #===============================================================================
+message(STATUS "CMAKE_ARCHIVE_OUTPUT_DIRECTORY = ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
+message(STATUS "CMAKE_RUNTIME_OUTPUT_DIRECTORY = ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+message(STATUS "CMAKE_LIBRARY_OUTPUT_DIRECTORY = ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 add_subdirectory("${PROJECT_NAME}")
 
 #include(CTest)
