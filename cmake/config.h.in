@@ -1,0 +1,9 @@
+#ifndef ODBC_INI_GEN_CONFIG_H
+#define ODBC_INI_GEN_CONFIG_H
+
+#define ODBC_INI_GEN_VERSION_MAJOR @odbc_ini_gen_VERSION_MAJOR@
+#define ODBC_INI_GEN_VERSION_MINOR @odbc_ini_gen_VERSION_MINOR@
+#define ODBC_INI_GEN_VERSION_PATCH @odbc_ini_gen_VERSION_PATCH@
+#define ODBC_INI_GEN_VERSION       "@odbc_ini_gen_VERSION@"
+
+#endif /* !ODBC_INI_GEN_CONFIG_H */

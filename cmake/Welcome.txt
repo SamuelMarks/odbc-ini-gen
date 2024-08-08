@@ -1,0 +1,3 @@
+ODBC dynamic ini builder, like GRUB update-triggers but for your database drivers.
+
+This installs odbc-ini-gen.
