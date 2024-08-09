@@ -117,7 +117,7 @@ add_subdirectory("${PROJECT_NAME}")
 include(GNUInstallDirs)
 
 install(
-        FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.h"
+        FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}_config.h"
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
 )
 include(InstallRequiredSystemLibraries)
