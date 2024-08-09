@@ -123,7 +123,7 @@ install(
 include(InstallRequiredSystemLibraries)
 set(CPACK_BUNDLE_NAME "${PROJECT_NAME}")
 set(CPACK_PACKAGE_VENDOR "SamuelMarks")
-set(CPACK_PACKAGE_DESCRIPTION "ODBC dynamic ini builder, like GRUB update-triggers but for your database drivers.")
+set(CPACK_PACKAGE_DESCRIPTION "ODBC dynamic ini builder, like GRUB update-triggers os-probe but for your database drivers.")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${CPACK_PACKAGE_DESCRIPTION_SUMMARY}")
 if (APPLE)
     set(CPACK_BUNDLE_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Info.plist")

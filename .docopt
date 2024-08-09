@@ -1,4 +1,4 @@
-odbc-ini-gen: ODBC dynamic ini builder, like GRUB update-triggers but for your database drivers.
+odbc-ini-gen: ODBC dynamic ini builder, like GRUB update-triggers os-probe but for your database drivers.
   (by default does `--infer-all` with output to stdout)
 
 Usage:

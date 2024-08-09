@@ -301,7 +301,7 @@ struct DocoptArgs docopt(int argc, char *argv[], const bool help, const char *ve
     struct DocoptArgs args = {
         0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL,
             usage_pattern,
-            { "odbc-ini-gen: ODBC dynamic ini builder, like GRUB update-triggers but for your database drivers.",
+            { "odbc-ini-gen: ODBC dynamic ini builder, like GRUB update-triggers os-probe but for your database drivers.",
               "  (by default does `--infer-all` with output to stdout)",
               "",
               "Usage:",
