@@ -52,6 +52,11 @@ cmake ..
 cmake --build .
 ```
 
+### Docker
+```bash
+docker build . -t odbc-ini-gen:latest
+```
+
 ### CLI interface
 
 Generated with `docopt`, use `python -m pip install https://api.github.com/repos/offscale/docopt.c/zipball/pyth

@@ -103,6 +103,6 @@ struct DocoptArgs {
     const char *help_message[28];
 };
 
-struct DocoptArgs docopt(int, char *[], bool, const char *);
+int docopt(struct DocoptArgs*, int, char *[], bool, const char *);
 
 #endif

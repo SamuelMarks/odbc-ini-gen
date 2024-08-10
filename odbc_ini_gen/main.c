@@ -10,6 +10,7 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 
 #include <Fileapi.h>
+#include <assert.h>
 #include <io.h>
 #include <wchar.h>
 
@@ -54,12 +55,15 @@ int main(int argc, char *argv[]) {
       }
 #endif
       ;
-  struct DocoptArgs args =
-      docopt(argc, argv, /* help */ true, /* version */ ODBC_INI_GEN_VERSION);
+  struct DocoptArgs _stack_args; // allocate to stack
+  struct DocoptArgs *args = &_stack_args;
+  int return_code = docopt(args, argc, argv, /* help */ true, /* version */ ODBC_INI_GEN_VERSION);
+  // assert(args != NULL);
+  if (return_code != EXIT_SUCCESS) return return_code;
 
   if ((sizeof search_paths / sizeof search_paths[0]) == 0)
     fputs("Nowhere to search for ODBC drivers", stderr);
-  else if (args.infer_all) {
+  else if (args->infer_all) {
     puts("TODO: implement --infer-all");
   }
 

@@ -8,11 +8,10 @@ RUN cmake -S . -B build_alpine && \
     cmake --install build_alpine --prefix /opt/odbc-ini-gen && \
     printf 'Installed %s' "$(/opt/odbc-ini-gen/bin/odbc_ini_gen --version)"
 
-# FROM alpine AS runner # <-- this works also
+FROM alpine AS runner
 # FROM busybox:musl AS runner
 # FROM scratch AS runner
-FROM gcr.io/distroless/static-debian12 AS runner
+# FROM gcr.io/distroless/static-debian12 AS runner
 
 COPY --from=builder /opt/odbc-ini-gen /opt/odbc-ini-gen
-RUN ls "/opt/odbc-ini-gen/bin"
 ENTRYPOINT ["/opt/odbc-ini-gen/bin/odbc_ini_gen"]

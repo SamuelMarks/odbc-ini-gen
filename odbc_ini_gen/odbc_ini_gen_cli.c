@@ -226,7 +226,7 @@ int parse_args(struct Tokens *ts, struct Elements *elements) {
 }
 
 int elems_to_args(struct Elements *elements, struct DocoptArgs *args,
-                     const bool help, const char *version) {
+                  const bool help, const char *version) {
     struct Command *command;
     struct Argument *argument;
     struct Option *option;
@@ -297,39 +297,7 @@ int elems_to_args(struct Elements *elements, struct DocoptArgs *args,
  * Main docopt function
  */
 
-struct DocoptArgs docopt(int argc, char *argv[], const bool help, const char *version) {
-    struct DocoptArgs args = {
-        0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL,
-            usage_pattern,
-            { "odbc-ini-gen: ODBC dynamic ini builder, like GRUB update-triggers os-probe but for your database drivers.",
-              "  (by default does `--infer-all` with output to stdout)",
-              "",
-              "Usage:",
-              "  odbc-ini-gen...",
-              "  odbc-ini-gen --output=<f>...",
-              "  odbc-ini-gen --infer-all...",
-              "  odbc-ini-gen --infer-all --output=<f>...",
-              "  odbc-ini-gen --infer-all --search=<folder>...",
-              "  odbc-ini-gen --infer-all --search=<folder> --output=<f>...",
-              "  odbc-ini-gen --name=<name> --driver=<lib>...",
-              "  odbc-ini-gen --name=<name> --driver=<lib> --output=<f>...",
-              "  odbc-ini-gen --name=<name> --driver=<lib> --desc=<desc>...",
-              "  odbc-ini-gen --name=<name> --driver=<lib> --desc=<desc> --output=<f>...",
-              "  odbc-ini-gen --help",
-              "  odbc-ini-gen --version",
-              "",
-              "Options:",
-              "  -h --help               Show this screen.",
-              "  --version               Show version.",
-              "  --infer-all             Find ODBC shared libraries and infer their database names. This is the default.",
-              "  --no-infer-all          Doesn't infer anything automatically. This is default when `--name` or `--driver` is provided.",
-              "  --name=<name>           Explicitly provided library name",
-              "  --desc=<lib>            Explicitly provided description",
-              "  --props=<s>             Explicitly additional properties (doesn't validate)",
-              "  --driver=<lib>          Explicitly provided shared library||object location (doesn't check existence)",
-              "  --search=<folder>       Folder to (non-recursively) search for shared objects within",
-              "  -o=<f>, --output=<f>    Output file. If not specified: will use `stdout`. If specified: will overwrite file."}
-    };
+int docopt(struct DocoptArgs *args, int argc, char *argv[], const bool help, const char *version) {
     struct Command commands[] = {
         {"odbc-ini-gen", 0}
     };
@@ -347,6 +315,38 @@ struct DocoptArgs docopt(int argc, char *argv[], const bool help, const char *ve
     };
     struct Elements elements;
     int return_code = EXIT_SUCCESS;
+    *args = (struct DocoptArgs){
+        0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL,
+        usage_pattern,
+        { "odbc-ini-gen: ODBC dynamic ini builder, like GRUB update-triggers os-probe but for your database drivers.",
+         "  (by default does `--infer-all` with output to stdout)",
+         "",
+         "Usage:",
+         "  odbc-ini-gen...",
+         "  odbc-ini-gen --output=<f>...",
+         "  odbc-ini-gen --infer-all...",
+         "  odbc-ini-gen --infer-all --output=<f>...",
+         "  odbc-ini-gen --infer-all --search=<folder>...",
+         "  odbc-ini-gen --infer-all --search=<folder> --output=<f>...",
+         "  odbc-ini-gen --name=<name> --driver=<lib>...",
+         "  odbc-ini-gen --name=<name> --driver=<lib> --output=<f>...",
+         "  odbc-ini-gen --name=<name> --driver=<lib> --desc=<desc>...",
+         "  odbc-ini-gen --name=<name> --driver=<lib> --desc=<desc> --output=<f>...",
+         "  odbc-ini-gen --help",
+         "  odbc-ini-gen --version",
+         "",
+         "Options:",
+         "  -h --help               Show this screen.",
+         "  --version               Show version.",
+         "  --infer-all             Find ODBC shared libraries and infer their database names. This is the default.",
+         "  --no-infer-all          Doesn't infer anything automatically. This is default when `--name` or `--driver` is provided.",
+         "  --name=<name>           Explicitly provided library name",
+         "  --desc=<lib>            Explicitly provided description",
+         "  --props=<s>             Explicitly additional properties (doesn't validate)",
+         "  --driver=<lib>          Explicitly provided shared library||object location (doesn't check existence)",
+         "  --search=<folder>       Folder to (non-recursively) search for shared objects within",
+         "  -o=<f>, --output=<f>    Output file. If not specified: will use `stdout`. If specified: will overwrite file."}
+    };
 
     elements.n_commands = 1;
     elements.n_arguments = 0;
@@ -364,9 +364,8 @@ struct DocoptArgs docopt(int argc, char *argv[], const bool help, const char *ve
     {
         struct Tokens ts = tokens_new(argc, argv);
         if (parse_args(&ts, &elements))
-            exit(EXIT_FAILURE);
+            return EXIT_FAILURE;
     }
-    if (elems_to_args(&elements, &args, help, version))
-        exit(return_code);
-    return args;
+    elems_to_args(&elements, args, help, version);
+    return return_code;
 }
