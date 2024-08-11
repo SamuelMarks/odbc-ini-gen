@@ -42,14 +42,21 @@ source_group("${EXEC_NAME} Source Files" FILES "${Source_Files}")
 add_executable("${EXEC_NAME}" "${Cli_Source_Files}")
 
 include(GNUInstallDirs)
+include_directories("common")
 target_include_directories(
         "${EXEC_NAME}"
         PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/common>"
         "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>"
         "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
-target_link_libraries("${EXEC_NAME}" "${LIBRARY_NAME}")
+
+set(dependencies "odbc_ini_fs" "odbc_infer")
+foreach (dep ${dependencies})
+    add_subdirectory("${dep}")
+endforeach ()
+target_link_libraries("${EXEC_NAME}" "${LIBRARY_NAME}" ${dependencies})
 
 set_target_properties("${EXEC_NAME}" PROPERTIES LINKER_LANGUAGE C)
 
@@ -62,7 +69,7 @@ include(GNUInstallDirs)
 install(TARGETS "${EXEC_NAME}"
         DESTINATION "${CMAKE_INSTALL_BINDIR}")
 
-install(FILES ${Cli_Header_Files} ${Header_Files}
+install(FILES "common/odbc_ini_gen_stdbool.h" ${Cli_Header_Files} ${Header_Files}
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
 
 set(installable_libs "${LIBRARY_NAME}" "${PROJECT_NAME}_compiler_flags")

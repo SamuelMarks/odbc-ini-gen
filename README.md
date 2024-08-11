@@ -65,6 +65,11 @@ on-3-13#egg=docopt_c` then:
 $ python -m docopt_c '.docopt' -o 'odbc_ini_gen/'
 ```
 
+## OS/distribution specific notes
+
+### Cygwin
+[iODBC](https://www.iodbc.org) is used.
+
 ---
 
 ## License
