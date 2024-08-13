@@ -9,10 +9,12 @@ ODBC dynamic ini builder, like GRUB update-triggers os-probe but for your databa
 
 ## Current inferences
 
-| Name       | Detected from                  |
-|------------|--------------------------------|
-| PostgreSQL | `psqlodbca.so`; `psqlodbcw.so` |
-| SQLite     | `libsqliteodbc.so`             |
+| Name                     | Detected from                  |
+|--------------------------|--------------------------------|
+| 1-Wire weather sensors   | `libw1odbc.so`                 |
+| FreeTDS (MS SQL, Sybase) | `libtdsodbc.so`                |
+| PostgreSQL               | `psqlodbca.so`; `psqlodbcw.so` |
+| SQLite                   | `libsqliteodbc.so`             |
 
 ## `--help`
 
@@ -45,7 +47,6 @@ ODBC dynamic ini builder, like GRUB update-triggers os-probe but for your databa
     --search=<folder>       Folder to (non-recursively) search for shared objects within
     -o=<f>, --output=<f>    Output file. If not specified: will use `stdout`. If specified: will overwrite file.
 
-
 ## Build dependencies
 
 - [CMake](https://cmake.org) (3.19 or later)
@@ -60,6 +61,7 @@ cmake --build .
 ```
 
 ### Docker
+
 ```bash
 docker build . -t odbc-ini-gen:latest
 ```
@@ -68,6 +70,7 @@ docker build . -t odbc-ini-gen:latest
 
 Generated with `docopt`, use `python -m pip install https://api.github.com/repos/offscale/docopt.c/zipball/pyth
 on-3-13#egg=docopt_c` then:
+
 ```bash
 $ python -m docopt_c '.docopt' -o 'odbc_ini_gen/'
 ```
@@ -75,6 +78,7 @@ $ python -m docopt_c '.docopt' -o 'odbc_ini_gen/'
 ## OS/distribution specific notes
 
 ### Cygwin
+
 [iODBC](https://www.iodbc.org) is used.
 
 ---

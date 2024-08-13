@@ -32,20 +32,30 @@ void run_on_each_file(char **buf, const char *name, const char *filepath) {
 
 int main(int argc, char *argv[]) {
   const char *search_paths[] = {
+  /* Worth considering: arch detection + `--arch` CLI override */
 #if defined(__APPLE__) && defined(__MACH__) && __APPLE__ && __MACH__
       "/usr/local/lib"
 #elif defined(__CYGWIN__)
       "/lib"
 #else
-      "/usr/lib/aarch64-linux-gnu/odbc",
-      "/usr/lib/arm-linux-gnueabi/odbc",
-      "/usr/lib/arm-linux-gnueabihf/odbc",
-      "/usr/lib/i386-linux-gnu/odbc",
-      "/usr/lib/mips64el-linux-gnuabi64/odbc",
-      "/usr/lib/mipsel-linux-gnu/odbc",
-      "/usr/lib/powerpc64le-linux-gnu/odbc",
-      "/usr/lib/s390x-linux-gnu/odbc",
-      "/usr/lib/x86_64-linux-gnu/odbc"
+      /* /usr/lib/<arch> is popular on debian, for example */
+      "/usr/lib/aarch64-linux-gnu/odbc", "/usr/lib/arm-linux-gnueabi/odbc",
+      "/usr/lib/arm-linux-gnueabihf/odbc", "/usr/lib/i386-linux-gnu/odbc",
+      "/usr/lib/mips64el-linux-gnuabi64/odbc", "/usr/lib/mipsel-linux-gnu/odbc",
+      "/usr/lib/powerpc64le-linux-gnu/odbc", "/usr/lib/s390x-linux-gnu/odbc",
+      "/usr/lib/x86_64-linux-gnu/odbc",
+
+      /* /usr/lib is popular on Alpine */
+      "/usr/lib",
+
+      /* SAGA GIS location */
+      "/usr/lib/aarch64-linux-gnu/saga", "/usr/lib/arm-linux-gnueabi/saga",
+      "/usr/lib/arm-linux-gnueabihf/saga", "/usr/lib/i386-linux-gnu/saga",
+      "/usr/lib/mips64el-linux-gnuabi64/saga", "/usr/lib/mipsel-linux-gnu/saga",
+      "/usr/lib/powerpc64le-linux-gnu/saga", "/usr/lib/s390x-linux-gnu/saga",
+      "/usr/lib/x86_64-linux-gnu/saga",
+      /* /usr/lib is popular on Alpine */
+      "/usr/lib/saga"
 #endif
   };
   size_t n_search_paths = sizeof search_paths / sizeof search_paths[0];
@@ -68,18 +78,17 @@ int main(int argc, char *argv[]) {
     size_t i;
     for (i = 0; i < n_search_paths; i++)
       foreach_regular_file_entry(search_paths[i], &func_with_data);
-    if (args->search != NULL)
-      foreach_regular_file_entry(args->search, &func_with_data);
-  } else if (args->search != NULL)
+  }
+  if (args->search != NULL)
     foreach_regular_file_entry(args->search, &func_with_data);
 
-  if (args->name != NULL && args->desc != NULL && args->driver != NULL) {
+  if (args->name != NULL && args->driver != NULL) {
     jasprintf(&func_with_data.buf,
               "[%s]\n"
               "Description     = %s\n"
               "Driver          = %s\n"
               "FileUsage       = 1\n\n",
-              args->name, args->desc, args->driver);
+              args->name, args->desc == NULL ? "" : args->desc, args->driver);
   }
   if (func_with_data.buf == NULL) {
     fputs("Nothing found to form INI file with", stderr);
