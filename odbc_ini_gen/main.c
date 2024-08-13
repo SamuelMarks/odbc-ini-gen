@@ -7,18 +7,35 @@
 #include "odbc_ini_gen_stdbool.h"
 #endif /* defined(HAS_STDBOOL) && !defined(bool) */
 
-#include "odbc_ini_gen_config.h"
+#include <errno.h>
+#include <c89stringutils_string_extras.h>
+
+#include "odbc_infer.h"
+#include "odbc_ini_fs.h"
 #include "odbc_ini_gen_cli.h"
+#include "odbc_ini_gen_config.h"
+
+void run_on_each_file(char **buf,
+                      const char *name, const char *filepath) {
+  enum OdbcInferences odbc_inference = OdbcInferences_from_str(name);
+  struct PairOfc_str name_description = OdbcInferences_to_name_description(odbc_inference);
+
+  jasprintf(buf,
+            "[%s]\n"
+            "Description     = %s\n"
+            "Driver          = %s\n"
+            "FileUsage       = 1\n\n",
+            name_description.first, name_description.second,
+            filepath);
+}
 
 int main(int argc, char *argv[]) {
-  unsigned drivers_added = 0;
   const char *search_paths[] = {
 #if defined(__APPLE__) && defined(__MACH__) && __APPLE__ && __MACH__
       "/usr/local/lib"
 #elif defined(__CYGWIN__)
-    "/lib"
+      "/lib"
 #else
-      "/usr/lib/x86_64-linux-gnu/odbc",
       "/usr/lib/aarch64-linux-gnu/odbc",
       "/usr/lib/arm-linux-gnueabi/odbc",
       "/usr/lib/arm-linux-gnueabihf/odbc",
@@ -33,20 +50,48 @@ int main(int argc, char *argv[]) {
   size_t n_search_paths = sizeof search_paths / sizeof search_paths[0];
   struct DocoptArgs _stack_args; // allocate to stack
   struct DocoptArgs *args = &_stack_args;
-  int return_code = docopt(args, argc, argv, /* help */ true, /* version */ ODBC_INI_GEN_VERSION);
+  int return_code = docopt(args, argc, argv, /* help */ true,
+                           /* version */ ODBC_INI_GEN_VERSION);
+  char *buf = NULL;
   // assert(args != NULL);
-  if (return_code != EXIT_SUCCESS) return return_code;
+  if (return_code != EXIT_SUCCESS)
+    return return_code;
 
-  if ((sizeof search_paths / sizeof search_paths[0]) == 0)
+  struct closure_store_char_ptr_on_cstr_cstr_to_void func_with_data = {
+      run_on_each_file, buf
+  };
+
+  if ((sizeof search_paths / sizeof search_paths[0]) == 0 &&
+      args->search == NULL)
     fputs("Nowhere to search for ODBC drivers", stderr);
   else if (args->infer_all) {
     size_t i;
-    for(i=0; i<n_search_paths; i++) {
-      printf("search_paths[%02ld] = \"%s\"\n", i, search_paths[i]);
-    }
-    puts("TODO: implement --infer-all");
+    for (i = 0; i < n_search_paths; i++)
+      foreach_regular_file_entry(search_paths[i], &func_with_data);
+  }
+  if (func_with_data.buf == NULL) {
+    fputs("Nothing found", stderr);
+    return EXIT_FAILURE;
   }
 
-  puts("Hello");
-  return drivers_added > 0 ? EXIT_SUCCESS : EXIT_FAILURE;
+  if (args->output == NULL)
+    puts(func_with_data.buf);
+  else {
+    FILE *fd = fopen(args->output, "wt");
+    ssize_t bytes_written;
+    if (fd == NULL) {
+      fprintf(stderr, "error using output file \"%s\"", args->output);
+      return ENOENT;
+    }
+    bytes_written = fputs(func_with_data.buf, fd);
+    fclose(fd);
+    if (bytes_written < 1) {
+      fputs("Did not write anything to file", stderr);
+      return EXIT_FAILURE;
+    }
+  }
+
+  free(func_with_data.buf);
+
+  return EXIT_SUCCESS;
 }

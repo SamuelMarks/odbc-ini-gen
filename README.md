@@ -7,6 +7,12 @@ odbc-ini-gen
 
 ODBC dynamic ini builder, like GRUB update-triggers os-probe but for your database drivers.
 
+## Current inferences
+
+| Name         | Detected from                  |
+|--------------|--------------------------------|
+| PostgreSQL   | `psqlodbca.so`; `psqlodbcw.so` |
+
 ## `--help`
 
     odbc-ini-gen: ODBC dynamic ini builder, like GRUB update-triggers os-probe but for your database drivers.

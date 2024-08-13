@@ -4,5 +4,5 @@
   "port-version": 1,
   "homepage": "https://github.com/SamuelMarks/odbc-ini-gen",
   "description": "ODBC dynamic ini builder, like GRUB update-triggers os-probe but for your database drivers.",
-  "dependencies": []
+  "dependencies": ["c89stringutils"]
 }

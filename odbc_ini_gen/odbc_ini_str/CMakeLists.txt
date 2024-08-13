@@ -4,10 +4,10 @@ get_filename_component(LIBRARY_NAME "${CMAKE_CURRENT_SOURCE_DIR}" NAME)
 # Library #
 ###########
 
-set(Header_Files "odbc_ini_fs.h")
+set(Header_Files "odbc_ini_str.h")
 source_group("Header Files" FILES "${Source_Files}")
 
-set(Source_Files "odbc_ini_fs.c")
+set(Source_Files "odbc_ini_str.c")
 source_group("Source Files" FILES "${Source_Files}")
 
 add_library("${LIBRARY_NAME}" "${Header_Files}" "${Source_Files}")
@@ -27,9 +27,6 @@ target_compile_definitions(
         INTERFACE
         "_${TARGET_ARCH}_"
 )
-find_package(c89stringutils CONFIG REQUIRED)
-target_link_libraries("${LIBRARY_NAME}" PRIVATE "c89stringutils" "c89stringutils_compiler_flags")
-
 set_target_properties("${LIBRARY_NAME}" PROPERTIES LINKER_LANGUAGE C)
 
 set_property(TARGET "${LIBRARY_NAME}" PROPERTY VERSION "1.0.0")

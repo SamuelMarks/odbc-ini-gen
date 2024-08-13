@@ -36,7 +36,8 @@ set_property(TARGET "${LIBRARY_NAME}" PROPERTY SOVERSION "1")
 # CLI #
 #######
 
-set(Cli_Source_Files "main.c")
+set(Cli_Source_Files "main.c"
+        common/odbc_ini_types.h)
 source_group("${EXEC_NAME} Source Files" FILES "${Source_Files}")
 
 add_executable("${EXEC_NAME}" "${Cli_Source_Files}")
@@ -52,11 +53,13 @@ target_include_directories(
         "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 
-set(dependencies "odbc_ini_fs" "odbc_infer")
+set(dependencies "odbc_ini_fs" "odbc_infer" "odbc_ini_str")
 foreach (dep ${dependencies})
     add_subdirectory("${dep}")
 endforeach ()
-target_link_libraries("${EXEC_NAME}" "${LIBRARY_NAME}" ${dependencies})
+find_package(c89stringutils CONFIG REQUIRED)
+target_link_libraries("${EXEC_NAME}" PUBLIC "${LIBRARY_NAME}" ${dependencies})
+target_link_libraries("${EXEC_NAME}" PRIVATE "c89stringutils" "c89stringutils_compiler_flags")
 
 set_target_properties("${EXEC_NAME}" PROPERTIES LINKER_LANGUAGE C)
 

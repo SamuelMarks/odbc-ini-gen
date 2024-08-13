@@ -1,5 +1,5 @@
-#ifndef ODBC_INI_GEN_ODBC_INFER_H
-#define ODBC_INI_GEN_ODBC_INFER_H
+#ifndef ODBC_INI_GEN_ODBC_INI_FS_H
+#define ODBC_INI_GEN_ODBC_INI_FS_H
 
 #if defined(HAS_STDBOOL) && !defined(bool)
 #include <stdbool.h>
@@ -28,9 +28,6 @@
 
 #include "odbc_ini_gen_config.h"
 
-enum OdbcInferences;
+bool ends_with(const char *, const char *);
 
-const char *OdbcInferences_to_str(enum OdbcInferences);
-enum OdbcInferences OdbcInferences_from_str(const char *);
-
-#endif /* !ODBC_INI_GEN_ODBC_INFER_H */
+#endif /* !ODBC_INI_GEN_ODBC_INI_FS_H */
