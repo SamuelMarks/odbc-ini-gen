@@ -9,9 +9,10 @@ ODBC dynamic ini builder, like GRUB update-triggers os-probe but for your databa
 
 ## Current inferences
 
-| Name         | Detected from                  |
-|--------------|--------------------------------|
-| PostgreSQL   | `psqlodbca.so`; `psqlodbcw.so` |
+| Name       | Detected from                  |
+|------------|--------------------------------|
+| PostgreSQL | `psqlodbca.so`; `psqlodbcw.so` |
+| SQLite     | `libsqliteodbc.so`             |
 
 ## `--help`
 

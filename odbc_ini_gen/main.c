@@ -7,26 +7,27 @@
 #include "odbc_ini_gen_stdbool.h"
 #endif /* defined(HAS_STDBOOL) && !defined(bool) */
 
-#include <errno.h>
 #include <c89stringutils_string_extras.h>
+#include <errno.h>
 
 #include "odbc_infer.h"
 #include "odbc_ini_fs.h"
 #include "odbc_ini_gen_cli.h"
 #include "odbc_ini_gen_config.h"
 
-void run_on_each_file(char **buf,
-                      const char *name, const char *filepath) {
+void run_on_each_file(char **buf, const char *name, const char *filepath) {
   enum OdbcInferences odbc_inference = OdbcInferences_from_str(name);
-  struct PairOfc_str name_description = OdbcInferences_to_name_description(odbc_inference);
+  if (odbc_inference != UNKNOWN) {
+    struct PairOfc_str name_description =
+        OdbcInferences_to_name_description(odbc_inference);
 
-  jasprintf(buf,
-            "[%s]\n"
-            "Description     = %s\n"
-            "Driver          = %s\n"
-            "FileUsage       = 1\n\n",
-            name_description.first, name_description.second,
-            filepath);
+    jasprintf(buf,
+              "[%s]\n"
+              "Description     = %s\n"
+              "Driver          = %s\n"
+              "FileUsage       = 1\n\n",
+              name_description.first, name_description.second, filepath);
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -58,8 +59,7 @@ int main(int argc, char *argv[]) {
     return return_code;
 
   struct closure_store_char_ptr_on_cstr_cstr_to_void func_with_data = {
-      run_on_each_file, buf
-  };
+      run_on_each_file, buf};
 
   if ((sizeof search_paths / sizeof search_paths[0]) == 0 &&
       args->search == NULL)
@@ -68,9 +68,21 @@ int main(int argc, char *argv[]) {
     size_t i;
     for (i = 0; i < n_search_paths; i++)
       foreach_regular_file_entry(search_paths[i], &func_with_data);
+    if (args->search != NULL)
+      foreach_regular_file_entry(args->search, &func_with_data);
+  } else if (args->search != NULL)
+    foreach_regular_file_entry(args->search, &func_with_data);
+
+  if (args->name != NULL && args->desc != NULL && args->driver != NULL) {
+    jasprintf(&func_with_data.buf,
+              "[%s]\n"
+              "Description     = %s\n"
+              "Driver          = %s\n"
+              "FileUsage       = 1\n\n",
+              args->name, args->desc, args->driver);
   }
   if (func_with_data.buf == NULL) {
-    fputs("Nothing found", stderr);
+    fputs("Nothing found to form INI file with", stderr);
     return EXIT_FAILURE;
   }
 
