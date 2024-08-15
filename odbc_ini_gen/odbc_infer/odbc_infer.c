@@ -1,11 +1,11 @@
 #include <string.h>
 
 #include "odbc_infer.h"
-#include "odbc_ini_fs.h"
 #include "odbc_ini_types.h"
 
 enum OdbcInferences OdbcInferences_from_str(const char *s) {
   if (strcmp(s, "libsqlite3odbc.so") == 0)
+    /* TODO: libsqlite3odbc-0.9998.so? */
     return SQLITE;
   else if (strcmp(s, "libtdsodbc.so") == 0)
     return TDS;
@@ -15,7 +15,6 @@ enum OdbcInferences OdbcInferences_from_str(const char *s) {
     return POSTGRESQL_ANSI;
   else if (strcmp(s, "psqlodbcw.so") == 0)
     return POSTGRESQL_UNICODE;
-  /* TODO: libsqlite3odbc-0.9998.so? */
   else
     return UNKNOWN;
 }

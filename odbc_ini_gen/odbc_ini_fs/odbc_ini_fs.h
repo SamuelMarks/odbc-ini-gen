@@ -40,14 +40,4 @@ struct closure_store_char_ptr_on_cstr_cstr_to_void {
 int foreach_regular_file_entry(
     const char *, struct closure_store_char_ptr_on_cstr_cstr_to_void *);
 
-enum OdbcInferences {
-  POSTGRESQL_ANSI,
-  POSTGRESQL_UNICODE,
-  SQLITE,
-  TDS, /* Sybase and MS SQL */
-  W1RETAP,
-  UNKNOWN
-};
-struct PairOfc_str OdbcInferences_to_name_description(enum OdbcInferences);
-
 #endif /* !ODBC_INI_GEN_ODBC_INI_FS_H */

@@ -28,7 +28,15 @@
 
 #include "odbc_ini_gen_config.h"
 
-enum OdbcInferences;
+enum OdbcInferences {
+  POSTGRESQL_ANSI,
+  POSTGRESQL_UNICODE,
+  SQLITE,
+  TDS, /* Sybase and MS SQL */
+  W1RETAP,
+  UNKNOWN
+};
+struct PairOfc_str OdbcInferences_to_name_description(enum OdbcInferences);
 
 const char *OdbcInferences_to_str(enum OdbcInferences);
 enum OdbcInferences OdbcInferences_from_str(const char *);
