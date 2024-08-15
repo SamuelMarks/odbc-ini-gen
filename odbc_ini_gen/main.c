@@ -20,13 +20,13 @@ void run_on_each_file(char **buf, const char *name, const char *filepath) {
   if (odbc_inference != UNKNOWN) {
     struct PairOfc_str name_description =
         OdbcInferences_to_name_description(odbc_inference);
-
-    jasprintf(buf,
-              "[%s]\n"
-              "Description     = %s\n"
-              "Driver          = %s\n"
-              "FileUsage       = 1\n\n",
-              name_description.first, name_description.second, filepath);
+    if (name_description.first != NULL && name_description.second != NULL)
+      jasprintf(buf,
+                "[%s]\n"
+                "Description     = %s\n"
+                "Driver          = %s\n"
+                "FileUsage       = 1\n\n",
+                name_description.first, name_description.second, filepath);
   }
 }
 

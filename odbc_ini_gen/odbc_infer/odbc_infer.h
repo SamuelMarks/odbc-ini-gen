@@ -29,6 +29,8 @@
 #include "odbc_ini_gen_config.h"
 
 enum OdbcInferences {
+  MARIADB,
+  MDB,
   POSTGRESQL_ANSI,
   POSTGRESQL_UNICODE,
   SQLITE,

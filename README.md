@@ -13,6 +13,8 @@ ODBC dynamic ini builder, like GRUB update-triggers os-probe but for your databa
 |--------------------------|--------------------------------|
 | 1-Wire weather sensors   | `libw1odbc.so`                 |
 | FreeTDS (MS SQL, Sybase) | `libtdsodbc.so`                |
+| MariaDB                  | `libmaodbc.so`                 |
+| MDB (MS Access, JET)     | `libmdbodbc.so`                |
 | PostgreSQL               | `psqlodbca.so`; `psqlodbcw.so` |
 | SQLite                   | `libsqliteodbc.so`             |
 

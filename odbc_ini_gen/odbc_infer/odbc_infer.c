@@ -4,7 +4,11 @@
 #include "odbc_ini_types.h"
 
 enum OdbcInferences OdbcInferences_from_str(const char *s) {
-  if (strcmp(s, "libsqlite3odbc.so") == 0)
+  if (strcmp(s, "libmaodbc.so") == 0)
+    return MARIADB;
+  else if (strcmp(s, "libmdbodbc.so") == 0)
+    return MDB;
+  else if (strcmp(s, "libsqlite3odbc.so") == 0)
     /* TODO: libsqlite3odbc-0.9998.so? */
     return SQLITE;
   else if (strcmp(s, "libtdsodbc.so") == 0)
@@ -21,6 +25,10 @@ enum OdbcInferences OdbcInferences_from_str(const char *s) {
 
 const char *OdbcInferences_to_str(enum OdbcInferences odbcInferences) {
   switch (odbcInferences) {
+  case MARIADB:
+    return "libmaodbc.so";
+  case MDB:
+    return "libmdbodbc.so";
   case POSTGRESQL_ANSI:
     return "psqlodbca.so";
   case POSTGRESQL_UNICODE:
@@ -38,6 +46,14 @@ const char *OdbcInferences_to_str(enum OdbcInferences odbcInferences) {
 struct PairOfc_str
 OdbcInferences_to_name_description(enum OdbcInferences odbcInferences) {
   switch (odbcInferences) {
+  case MARIADB:
+    return (struct PairOfc_str){
+        "MariaDB",
+        "ODBC driver for MariaDB"};
+  case MDB:
+    return (struct PairOfc_str){
+        "MDB",
+        "Driver to access JET / MS Access database (MDB) files through ODBC"};
   case POSTGRESQL_ANSI:
     return (struct PairOfc_str){
         "PostgreSQL UNICODE",
