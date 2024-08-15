@@ -1,6 +1,6 @@
 FROM alpine:latest AS builder
 
-RUN apk add --no-cache gcc musl-dev make cmake linux-headers
+RUN apk add --no-cache gcc musl-dev make cmake linux-headers git
 WORKDIR /src/odbc-ini-gen
 COPY . .
 RUN cmake -S . -B build_alpine && \

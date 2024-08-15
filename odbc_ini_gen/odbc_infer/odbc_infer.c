@@ -47,9 +47,7 @@ struct PairOfc_str
 OdbcInferences_to_name_description(enum OdbcInferences odbcInferences) {
   switch (odbcInferences) {
   case MARIADB:
-    return (struct PairOfc_str){
-        "MariaDB",
-        "ODBC driver for MariaDB"};
+    return (struct PairOfc_str){"MariaDB", "ODBC driver for MariaDB"};
   case MDB:
     return (struct PairOfc_str){
         "MDB",

@@ -64,12 +64,13 @@ int main(int argc, char *argv[]) {
   int return_code = docopt(args, argc, argv, /* help */ true,
                            /* version */ ODBC_INI_GEN_VERSION);
   char *buf = NULL;
+  struct closure_store_char_ptr_on_cstr_cstr_to_void func_with_data;
+  func_with_data.buf = buf;
+  func_with_data.func = run_on_each_file;
+
   // assert(args != NULL);
   if (return_code != EXIT_SUCCESS)
     return return_code;
-
-  struct closure_store_char_ptr_on_cstr_cstr_to_void func_with_data = {
-      run_on_each_file, buf};
 
   if ((sizeof search_paths / sizeof search_paths[0]) == 0 &&
       args->search == NULL)

@@ -95,14 +95,23 @@ configure_file(
         "${PROJECT_NAME}_config.h"
 )
 
+# Should add Hunter, Conan, &etc.
+if (NOT DEFINED VCPKG_TOOLCHAIN OR NOT VCPKG_TOOLCHAIN)
+    include(FetchContent)
+    FetchContent_Declare(
+            c89stringutils
+            GIT_REPOSITORY https://github.com/offscale/c89stringutils
+            GIT_TAG        a9564ebdade0de40a733a1d234af18732a87e97b
+            FIND_PACKAGE_ARGS NAMES c89stringutils
+    )
+    FetchContent_MakeAvailable(c89stringutils)
+endif ()
+
 #===============================================================================
 # 4. ADD SUB-TARGETS
 # Doing this at the end so that all definitions and link/include paths are
 # available for the sub-projects.
 #===============================================================================
-message(STATUS "CMAKE_ARCHIVE_OUTPUT_DIRECTORY = ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
-message(STATUS "CMAKE_RUNTIME_OUTPUT_DIRECTORY = ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-message(STATUS "CMAKE_LIBRARY_OUTPUT_DIRECTORY = ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 add_subdirectory("${PROJECT_NAME}")
 
 #include(CTest)
