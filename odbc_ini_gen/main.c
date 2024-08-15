@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
               args->name, args->desc == NULL ? "" : args->desc, args->driver);
   }
   if (func_with_data.buf == NULL) {
-    fputs("Nothing found to form INI file with", stderr);
+    fputs("Nothing found to form INI file with\n", stderr);
     return EXIT_FAILURE;
   }
 
@@ -100,14 +100,14 @@ int main(int argc, char *argv[]) {
     puts(func_with_data.buf);
   else {
     FILE *fd = fopen(args->output, "wt");
-    ssize_t bytes_written;
+    int success;
     if (fd == NULL) {
       fprintf(stderr, "error using output file \"%s\"", args->output);
       return ENOENT;
     }
-    bytes_written = fputs(func_with_data.buf, fd);
+    success = fputs(func_with_data.buf, fd);
     fclose(fd);
-    if (bytes_written < 1) {
+    if (success < 0) {
       fputs("Did not write anything to file", stderr);
       return EXIT_FAILURE;
     }

@@ -8,8 +8,9 @@ enum OdbcInferences OdbcInferences_from_str(const char *s) {
     return MARIADB;
   else if (strcmp(s, "libmdbodbc.so") == 0)
     return MDB;
-  else if (strcmp(s, "libsqlite3odbc.so") == 0)
-    /* TODO: libsqlite3odbc-0.9998.so? */
+  else if (strcmp(s, "libsqlite3odbc.so") == 0 ||
+           strcmp(s, "libsqlite3odbc-0.9998.so") == 0 ||
+           strcmp(s, "libsqlite3odbc-0.99991.so") == 0)
     return SQLITE;
   else if (strcmp(s, "libtdsodbc.so") == 0)
     return TDS;

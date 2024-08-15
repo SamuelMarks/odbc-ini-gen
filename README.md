@@ -9,14 +9,14 @@ ODBC dynamic ini builder, like GRUB update-triggers os-probe but for your databa
 
 ## Current inferences
 
-| Name                     | Detected from                  |
-|--------------------------|--------------------------------|
-| 1-Wire weather sensors   | `libw1odbc.so`                 |
-| FreeTDS (MS SQL, Sybase) | `libtdsodbc.so`                |
-| MariaDB                  | `libmaodbc.so`                 |
-| MDB (MS Access, JET)     | `libmdbodbc.so`                |
-| PostgreSQL               | `psqlodbca.so`; `psqlodbcw.so` |
-| SQLite                   | `libsqliteodbc.so`             |
+| Name                     | Detected from                                                               |
+|--------------------------|-----------------------------------------------------------------------------|
+| 1-Wire weather sensors   | `libw1odbc.so`                                                              |
+| FreeTDS (MS SQL, Sybase) | `libtdsodbc.so`                                                             |
+| MariaDB                  | `libmaodbc.so`                                                              |
+| MDB (MS Access, JET)     | `libmdbodbc.so`                                                             |
+| PostgreSQL               | `psqlodbca.so`; `psqlodbcw.so`                                              |
+| SQLite                   | `libsqliteodbc.so`; `libsqlite3odbc-0.9998.so`; `libsqlite3odbc-0.99991.so` |
 
 ## `--help`
 
