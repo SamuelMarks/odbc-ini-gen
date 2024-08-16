@@ -55,18 +55,18 @@ OdbcInferences_to_name_description(enum OdbcInferences odbcInferences) {
         "Driver to access JET / MS Access database (MDB) files through ODBC"};
   case POSTGRESQL_ANSI:
     return (struct PairOfc_str){
+        "PostgreSQL ANSI",
+        "ANSI driver which is also able to handle some multibyte character "
+        "sets such as EUC_JP, BIG5 and Shift-JIS. This driver should also be "
+        "used with databases encoded using any of the LATIN charactersets"};
+  case POSTGRESQL_UNICODE:
+    return (struct PairOfc_str){
         "PostgreSQL UNICODE",
         "Unicode enabled driver that will work well with modern versions of "
         "applications such as Microsoft Access, with character from a huge "
         "range of languages. You should use this driver with PostgreSQL "
         "databases encoded as 'UNICODE' (more precisely known as 'UTF-8' in "
         "PostgreSQL)."};
-  case POSTGRESQL_UNICODE:
-    return (struct PairOfc_str){
-        "PostgreSQL ANSI",
-        "ANSI driver which is also able to handle some multibyte character "
-        "sets such as EUC_JP, BIG5 and Shift-JIS. This driver should also be "
-        "used with databases encoded using any of the LATIN charactersets"};
   case SQLITE:
     return (struct PairOfc_str){"SQLite", "SQLite ODBC Driver"};
   case TDS:

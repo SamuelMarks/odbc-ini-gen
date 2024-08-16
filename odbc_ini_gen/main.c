@@ -56,6 +56,17 @@ int main(int argc, char *argv[]) {
       "/usr/lib/x86_64-linux-gnu/saga",
       /* /usr/lib is popular on Alpine */
       "/usr/lib/saga"
+
+      /* w1retap location */
+      "/usr/lib/aarch64-linux-gnu/w1retap",
+      "/usr/lib/arm-linux-gnueabi/w1retap",
+      "/usr/lib/arm-linux-gnueabihf/w1retap", "/usr/lib/i386-linux-gnu/w1retap",
+      "/usr/lib/mips64el-linux-gnuabi64/saga",
+      "/usr/lib/mipsel-linux-gnu/w1retap",
+      "/usr/lib/powerpc64le-linux-gnu/w1retap",
+      "/usr/lib/s390x-linux-gnu/w1retap", "/usr/lib/x86_64-linux-gnu/w1retap",
+      /* /usr/lib is popular on Alpine */
+      "/usr/lib/w1retap"
 #endif
   };
   size_t n_search_paths = sizeof search_paths / sizeof search_paths[0];
