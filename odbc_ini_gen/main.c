@@ -31,6 +31,7 @@ void run_on_each_file(char **buf, const char *name, const char *filepath) {
 }
 
 int main(int argc, char *argv[]) {
+  int exit_code = EXIT_SUCCESS;
   const char *search_paths[] = {
   /* Worth considering: arch detection + `--arch` CLI override */
 #if defined(__APPLE__) && defined(__MACH__) && __APPLE__ && __MACH__
@@ -69,19 +70,25 @@ int main(int argc, char *argv[]) {
       "/usr/lib/w1retap"
 #endif
   };
-  size_t n_search_paths = sizeof search_paths / sizeof search_paths[0];
-  struct DocoptArgs _stack_args; // allocate to stack
-  struct DocoptArgs *args = &_stack_args;
-  int return_code = docopt(args, argc, argv, /* help */ true,
-                           /* version */ ODBC_INI_GEN_VERSION);
+  const size_t n_search_paths = sizeof search_paths / sizeof search_paths[0];
   char *buf = NULL;
   struct closure_store_char_ptr_on_cstr_cstr_to_void func_with_data;
+  struct DocoptArgs *args = malloc(sizeof *args);
+  if (args == NULL) {
+    fputs("Out of memory\n", stderr);
+    return ENOMEM;
+  } else {
+    exit_code = docopt(args, argc, argv, /* help */ true,
+                       /* version */ ODBC_INI_GEN_VERSION);
+    if (exit_code != EXIT_SUCCESS) {
+      free(args);
+      return exit_code;
+    }
+  }
   func_with_data.buf = buf;
   func_with_data.func = run_on_each_file;
 
   // assert(args != NULL);
-  if (return_code != EXIT_SUCCESS)
-    return return_code;
 
   if ((sizeof search_paths / sizeof search_paths[0]) == 0 &&
       args->search == NULL)
@@ -104,7 +111,8 @@ int main(int argc, char *argv[]) {
   }
   if (func_with_data.buf == NULL) {
     fputs("Nothing found to form INI file with\n", stderr);
-    return EXIT_FAILURE;
+    exit_code = EXIT_FAILURE;
+    goto cleanup;
   }
 
   if (args->output == NULL)
@@ -114,17 +122,19 @@ int main(int argc, char *argv[]) {
     int success;
     if (fd == NULL) {
       fprintf(stderr, "error using output file \"%s\"", args->output);
-      return ENOENT;
+      goto cleanup;
     }
     success = fputs(func_with_data.buf, fd);
     fclose(fd);
     if (success < 0) {
       fputs("Did not write anything to file", stderr);
-      return EXIT_FAILURE;
+      goto cleanup;
     }
   }
 
+cleanup:
   free(func_with_data.buf);
+  free(args);
 
-  return EXIT_SUCCESS;
+  return exit_code;
 }

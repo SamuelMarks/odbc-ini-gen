@@ -46,7 +46,7 @@ int foreach_regular_file_entry(
   DIR *d = opendir(directory);
   if (d) {
     while ((dir = readdir(d)) != NULL) {
-      if (dir->d_type == DT_REG) {
+      if (dir->d_type == DT_REG || dir->d_type == DT_LNK) {
         char *filepath;
         asprintf(&filepath, "%s" PATH_SEP "%s", directory, dir->d_name);
         f->func(&f->buf, dir->d_name, filepath);
